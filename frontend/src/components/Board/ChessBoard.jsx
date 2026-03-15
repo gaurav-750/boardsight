@@ -7,10 +7,11 @@
 
 
 import { Chessboard } from "react-chessboard";
+import "./ChessBoard.css";
 
-export default function ChessBoard({position, onPieceDrop}) {
-
+export default function ChessBoard({ position, onPieceDrop, isLoading }) {
   return (
+    // Position relative so the overlay can be positioned on top of the board
     <div className="board-wrapper">
       <Chessboard
         id="boardsight-board"
@@ -18,14 +19,17 @@ export default function ChessBoard({position, onPieceDrop}) {
         position={position}
         onPieceDrop={onPieceDrop}
         boardOrientation="white"
-
-        // Custom square colors — warm subtle tones like lichess/chess.com
         customDarkSquareStyle={{ backgroundColor: "#b58863" }}
         customLightSquareStyle={{ backgroundColor: "#f0d9b5" }}
-
-        // Allow all piece dragging — no rules enforced (free editor)
-        arePiecesDraggable={true}
+        arePiecesDraggable={!isLoading}   // disable dragging while analyzing
       />
+
+      {/* Overlay — only rendered while loading */}
+      {isLoading && (
+        <div className="board-overlay">
+          <div className="board-overlay-spinner" />
+        </div>
+      )}
     </div>
   );
 }

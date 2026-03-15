@@ -9,7 +9,7 @@
   --border: #2a2d3a;
 }
 
-/* ── Base reset & defaults ────────────────────────────────── */
+/* ── Base reset ───────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -27,43 +27,72 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* App layout */
+/* ── App layout ───────────────────────────────────────────── */
 .app {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 40px;
+  padding: 48px 24px;
   min-height: 100vh;
 }
 
+/* Page title */
 .app-title {
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 24px;
+  margin-bottom: 36px;
   letter-spacing: 0.5px;
+
+  /* Subtle accent underline */
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent);
 }
 
-/* Main content layout — board centered with sidebar placeholders */
+/* Main content — board centered with sidebar placeholders */
 .app-content {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 24px;
+  gap: 32px;
   width: 100%;
   max-width: 1200px;
   justify-content: center;
 }
 
-/* Left and right sidebar placeholders — empty for now */
+/* Sidebar placeholders — empty for now, ready for future features */
 .app-sidebar {
   width: 200px;
   flex-shrink: 0;
 }
 
-/* Board + toolbar + FEN stacked vertically */
+/* Board + toolbar + FEN stacked vertically, centered */
 .app-center {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0;                /* individual components control their own spacing */
+}
+
+/* ── Responsive — laptop screens ──────────────────────────── */
+@media (max-width: 1024px) {
+  /* Hide sidebars on smaller screens */
+  .app-sidebar {
+    display: none;
+  }
+
+  .app-content {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .app {
+    padding: 24px 16px;
+  }
+
+  .app-title {
+    font-size: 22px;
+    margin-bottom: 24px;
+  }
 }

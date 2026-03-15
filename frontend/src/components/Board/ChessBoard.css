@@ -1,0 +1,33 @@
+/* Board wrapper — needed for overlay positioning */
+.board-wrapper {
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;     /* clips the overlay to the board corners */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);   /* subtle depth */
+  }
+  
+  /* Semi-transparent dark overlay on top of the board */
+  .board-overlay {
+    position: absolute;
+    inset: 0;             /* shorthand for top/right/bottom/left: 0 */
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    z-index: 10;
+  }
+  
+  /* Spinner circle */
+  .board-overlay-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }

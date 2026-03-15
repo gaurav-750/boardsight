@@ -52,7 +52,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <h1 className="app-title">Chess Practice</h1>
+      <h1 className="app-title">BoardSight</h1>
 
       {/* Main content area — board with room for future sidebars */}
       <div className="app-content">
