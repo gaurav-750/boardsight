@@ -1,0 +1,55 @@
+/* Toolbar container — horizontal row of buttons */
+.toolbar {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  
+  /* Base button style — replaces generic browser button look */
+  .toolbar-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;                              /* icon + label spacing */
+  
+    padding: 10px 16px;
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+  
+    /* Smooth hover transition */
+    transition: all 0.2s ease;
+  }
+  
+  .toolbar-btn:hover {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  
+  /* Disabled state — when image is being analyzed */
+  .toolbar-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Danger variant — Clear Board button */
+  .toolbar-btn--danger:hover {
+    background-color: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+  }
+  
+  /* Spinner animation — rotates the Loader2 icon */
+  .spinner {
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }

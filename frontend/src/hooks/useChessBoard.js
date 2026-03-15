@@ -10,9 +10,6 @@ import {Chess} from "chess.js";
 // Starting position FEN — the standard chess starting layout
 const STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-// Empty board FEN — no pieces, just an empty 8x8 board
-const EMPTY_FEN = "8/8/8/8/8/8/8/8 w - - 0 1";
-
 export default function useChessBoard() {
   // chess.js instance — manages the board state under the hood
   // We use useState so React re-renders when we update it
@@ -70,7 +67,9 @@ export default function useChessBoard() {
   // --- Clear Board ---
   // Removes all pieces — useful for manually setting up a position
   function clearBoard() {
-    setGame(new Chess(EMPTY_FEN));
+    const newGame = new Chess();
+    newGame.clear();       // removes all pieces including kings
+    setGame(newGame);
   }
 
   // Expose state and handlers to components
