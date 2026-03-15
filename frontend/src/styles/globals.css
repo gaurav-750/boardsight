@@ -1,0 +1,28 @@
+/* ── Design tokens (dark theme) ────────────────────────────── */
+:root {
+  --bg-primary: #0f1117;
+  --bg-surface: #1a1d27;
+  --accent: #4f8ef7;
+  --text-primary: #e2e8f0;
+  --text-muted: #64748b;
+  --danger: #ef4444;
+  --border: #2a2d3a;
+}
+
+/* ── Base reset & defaults ────────────────────────────────── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
