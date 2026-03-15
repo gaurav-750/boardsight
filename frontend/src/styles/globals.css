@@ -43,3 +43,27 @@ body {
   margin-bottom: 24px;
   letter-spacing: 0.5px;
 }
+
+/* Main content layout — board centered with sidebar placeholders */
+.app-content {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+  max-width: 1200px;
+  justify-content: center;
+}
+
+/* Left and right sidebar placeholders — empty for now */
+.app-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+/* Board + toolbar + FEN stacked vertically */
+.app-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

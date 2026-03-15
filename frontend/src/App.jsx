@@ -10,63 +10,80 @@ import Toolbar from "./components/Toolbar/Toolbar";
 import FenDisplay from "./components/FenDisplay/FenDisplay";
 import ErrorToast from "./components/ErrorToast/ErrorToast";
 import useChessBoard from "./hooks/useChessBoard";
+import { analyzeImage } from "./services/api";
 
 
 export default function App() {
 
   // Get board state and handlers from our hook
-  const { position, fen, onPieceDrop, resetBoard, clearBoard } = useChessBoard();
+  const { position, fen, onPieceDrop, loadFen, resetBoard, clearBoard } = useChessBoard();
 
+  // isLoading — true while waiting for Gemini to respond
+  // Passed to Toolbar to disable the upload button + show spinner
+  const [isLoading, setIsLoading] = useState(false);
   
    // Error toast state — null means no toast shown
    const [errorMessage, setErrorMessage] = useState(null);
 
   // Placeholder upload handler — will call the real API in F5
-  function handleUpload(file) {
+  async function handleUpload(file) {
     console.log("File selected:", file.name);
-    // Real API call wired in F5
-  }
 
-  function dismissError() {
-    setErrorMessage(null);
-  }
+    setIsLoading(true);
+    setErrorMessage(null);  // clear any previous error
 
-   // Temporary — test the toast by clicking this button
-  // Remove after validating
-  function testToast() {
-    setErrorMessage("Could not analyze image. Please try again.");
+    try {
+      // Call the API service — sends image to backend, gets FEN back
+      const fen = await analyzeImage(file);
+
+      // Load the returned FEN onto the board
+      loadFen(fen);
+
+    } catch (error) {
+      // Show the error message in the toast
+      setErrorMessage(error.message);
+
+    } finally {
+      // Always stop loading — whether success or failure
+      // Like a finally block in Java — always runs
+      setIsLoading(false);
+    }
   }
 
   return (
     <div className="app">
       <h1 className="app-title">Chess Practice</h1>
 
-      <ChessBoard
-        position={position}
-        onPieceDrop={onPieceDrop}
-      />
+      {/* Main content area — board with room for future sidebars */}
+      <div className="app-content">
+        <div className="app-sidebar" />     {/* left sidebar placeholder */}
 
-      <Toolbar
-        onUpload={handleUpload}
-        onReset={resetBoard}
-        onClear={clearBoard}
-        isLoading={false}
-      />
+        <div className="app-center">
+          <ChessBoard
+            position={position}
+            onPieceDrop={onPieceDrop}
+          />
 
-      <FenDisplay fen={fen} />
+          <Toolbar
+            onUpload={handleUpload}
+            onReset={resetBoard}
+            onClear={clearBoard}
+            isLoading={isLoading}
+          />
 
-      {/* Only render toast when there's an error message */}
+          <FenDisplay fen={fen} />
+        </div>
+
+        <div className="app-sidebar" />     {/* right sidebar placeholder */}
+      </div>
+
+      {/* Error toast — only rendered when there's an error */}
       {errorMessage && (
         <ErrorToast
           message={errorMessage}
-          onDismiss={dismissError}
+          onDismiss={() => setErrorMessage(null)}
         />
       )}
-
-      {/* Temporary test button — remove after validating toast */}
-      <button onClick={testToast} style={{ marginTop: 16, color: "var(--text-muted)", background: "none", border: "none", cursor: "pointer", fontSize: 12 }}>
-        (test error toast)
-      </button>
     </div>
   );
 }
