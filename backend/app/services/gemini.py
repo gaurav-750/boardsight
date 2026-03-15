@@ -3,28 +3,27 @@
 # This will be like a @Service class in Spring Boot
 # All Gemini API logic lives here, keeping it separate from the route handlers
 
-
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
 # Import our config to get the API key — like @Value("${gemini.api.key}") in Spring
 from app.config import settings
-
 # Import our FEN validator to verify Gemini's response
 from app.utils.fen_validator import is_valid_fen
 
-# Configure the Gemini SDK with our API key — this is a one-time global setup
-genai.configure(api_key=settings.GEMINI_API_KEY)
+# Initialize the client with our API key
+# New SDK uses a client pattern instead of global configuration
+client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
 
 async def analyze_chess_image(image_bytes: bytes, mime_type: str) -> str:
-  # Initialize the Gemini model — we use Flash because it's fast and free tier
-  model = genai.GenerativeModel("gemini-2.5-flash")
+  model = "gemini-2.5-flash"
 
   # Build the image payload — Gemini accepts raw bytes with a mime type
-  image_part = {
-    "mime_type": mime_type,  # e.g. "image/png" or "image/jpeg"
-    "data": image_bytes  # raw bytes of the uploaded image
-  }
+  image_part = types.Part.from_bytes(
+      data=image_bytes,
+      mime_type=mime_type
+  )
 
   # The exact prompt — we tell Gemini to return ONLY the FEN, nothing else
   # Being very explicit here because AI models like to add extra explanation
@@ -48,7 +47,11 @@ async def analyze_chess_image(image_bytes: bytes, mime_type: str) -> str:
 
   # Send the image + prompt to Gemini and get the response
   # generate_content() accepts a list of parts — text and/or images
-  response = model.generate_content([image_part, prompt])
+  # Call Gemini — new SDK uses client.models.generate_content()
+  response = client.models.generate_content(
+      model=model,
+      contents=[image_part, prompt]
+  )
 
   # Strip any accidental whitespace or newlines from the response
   fen = response.text.strip()
