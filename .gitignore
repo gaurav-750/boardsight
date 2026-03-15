@@ -12,7 +12,12 @@ __pycache__
 # Mac
 .DS_Store
 
-# Node (for frontend later)
+# Node / frontend
 node_modules/
 dist/
 .env.local
+.env.*.local
+
+# Editor artifacts
+*.swp
+*.swo
