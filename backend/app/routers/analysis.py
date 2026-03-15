@@ -57,6 +57,16 @@ async def analyze_image(file: UploadFile = File(...)):
     # Re-raise HTTP exceptions as-is — don't swallow them in the catch-all below
     raise
 
+  except ValueError as e:
+    # ValueError means Gemini responded but with something invalid
+    # e.g. "I cannot analyze this image" or an invalid FEN
+    # We surface the exact message so the client knows what happened
+    logger.error(f"Gemini returned invalid response: {str(e)}")
+    raise HTTPException(
+        status_code=400,
+        detail=str(e)  # pass Gemini's exact message through
+    )
+
   except Exception as e:
     # Catch-all for unexpected errors — like Gemini being down, network issues etc.
     # Always log the full error for debugging
