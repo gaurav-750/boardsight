@@ -18,7 +18,7 @@ genai.configure(api_key=settings.GEMINI_API_KEY)
 
 async def analyze_chess_image(image_bytes: bytes, mime_type: str) -> str:
   # Initialize the Gemini model — we use Flash because it's fast and free tier
-  model = genai.GenerativeModel("gemini-1.5-flash")
+  model = genai.GenerativeModel("gemini-2.5-flash")
 
   # Build the image payload — Gemini accepts raw bytes with a mime type
   image_part = {
@@ -29,10 +29,21 @@ async def analyze_chess_image(image_bytes: bytes, mime_type: str) -> str:
   # The exact prompt — we tell Gemini to return ONLY the FEN, nothing else
   # Being very explicit here because AI models like to add extra explanation
   prompt = (
-    "You are a chess position analyzer. Analyze this chess diagram "
-    "and return ONLY the FEN string representing the position. "
-    "Return nothing else — no explanation, no markdown, no punctuation. "
-    "Just the raw FEN string."
+    "You are an expert chess position analyzer. "
+    "Analyze this chess diagram image and return ONLY the FEN string. "
+    "\n\n"
+    "Follow these rules strictly:\n"
+    "1. The board has 8 ranks (rows) and 8 files (columns).\n"
+    "2. Rank 8 is the TOP of the board, Rank 1 is the BOTTOM.\n"
+    "3. Files go a (left) to h (right).\n"
+    "4. Count each square carefully — do not guess a piece's position.\n"
+    "5. For each rank, count all 8 squares from left to right.\n"
+    "6. Use uppercase for White pieces (P N B R Q K) "
+    "and lowercase for Black pieces (p n b r q k).\n"
+    "7. Double-check your answer before returning it.\n"
+    "\n"
+    "Return ONLY the raw FEN string. "
+    "No explanation, no markdown, no punctuation. Just the FEN."
   )
 
   # Send the image + prompt to Gemini and get the response
