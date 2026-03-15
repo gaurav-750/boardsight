@@ -1,0 +1,18 @@
+# Python
+.venv
+__pycache__
+*.pyc
+*.pyo
+.env
+.pytest_cache
+
+# PyCharm
+.idea/
+
+# Mac
+.DS_Store
+
+# Node (for frontend later)
+node_modules/
+dist/
+.env.local
